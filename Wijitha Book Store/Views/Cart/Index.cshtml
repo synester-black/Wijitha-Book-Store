@@ -1,0 +1,38 @@
+﻿@model Wijitha_Book_Store.Models.Cart
+
+<h1>Cart</h1>
+
+@if (Model.CartItems?.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.Book.Title</td>
+                    <td>@item.Book.Price.ToString("c")</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Book.Price * item.Quantity).ToString("c")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Total:</td>
+                <td>@Model.GetCartTotal().ToString("c")</td>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <p>Your cart is empty.</p>
+}

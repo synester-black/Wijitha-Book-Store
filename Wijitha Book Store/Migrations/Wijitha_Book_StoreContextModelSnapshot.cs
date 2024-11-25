@@ -69,6 +69,42 @@ namespace Wijitha_Book_Store.Migrations
 
                     b.ToTable("Book");
                 });
+
+            modelBuilder.Entity("Wijitha_Book_Store.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CartId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("Wijitha_Book_Store.Models.CartItem", b =>
+                {
+                    b.HasOne("Wijitha_Book_Store.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
 #pragma warning restore 612, 618
         }
     }

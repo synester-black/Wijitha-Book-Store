@@ -15,5 +15,8 @@ namespace Wijitha_Book_Store.Data
         }
 
         public DbSet<Wijitha_Book_Store.Models.Book> Book { get; set; } = default!;
+        public DbSet<CartItem> CartItems { get; set; }  
+
+
     }
 }

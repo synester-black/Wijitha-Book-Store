@@ -10,7 +10,18 @@ builder.Services.AddDbContext<Wijitha_Book_StoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Wijitha_Book_StoreContext")
     ?? throw new InvalidOperationException("Connection string 'Wijitha_Book_StoreContext' not found.")));
 
-// Add services to the container
+// Register IHttpContextAccessor and Cart
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<Cart>(sp => Cart.GetCart(sp));
+
+// Add Distributed Memory Cache and Session
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -34,19 +45,18 @@ using (var scope = app.Services.CreateScope())
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // Enable HSTS for production
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Store}/{action=Index}/{id?}");
 
 app.Run();
+
